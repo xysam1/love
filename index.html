@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Love Question</title>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #ffd6e8 0%, #ffb3d9 100%);
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        #questionContainer {
+            position: relative;
+            text-align: center;
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 108, 166, 0.3);
+            width: 100%;
+            max-width: 380px;
+            overflow: visible;
+        }
+
+        #questionContainer h2 {
+            color: #ff6ca6;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            min-height: 50px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        #yesBtn {
+            background: #ff6ca6;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 108, 166, 0.4);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 108, 166, 0.6);
+        }
+
+        #noBtn {
+            background: #ffd1e0;
+            color: #ff6ca6;
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+
+        #noBtn:hover {
+            background: #ffb3d9;
+        }
+
+        #heartLoader {
+            display: none;
+            font-size: 40px;
+            animation: heartBeat 0.6s infinite alternate;
+            margin-top: 20px;
+        }
+
+        @keyframes heartBeat {
+            to {
+                transform: scale(1.3);
+            }
+        }
+
+        #resultContainer {
+            display: none;
+            font-size: 18px;
+            color: #ff6ca6;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+        }
+
+        .slide {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 14px;
+            object-fit: cover;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #ff6ca6;
+            border: 2px solid #ff6ca6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #ff6ca6;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -20px;
+            font-size: 24px;
+            animation: floatUp linear forwards;
+            pointer-events: none;
+            will-change: transform, opacity;
+            z-index: 1000;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .fade-photo {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 14px;
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1.2s ease, transform 1.2s ease;
+            display: block;
+            margin: 15px auto;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .fade-photo.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @media (max-width: 480px) {
+            #questionContainer {
+                padding: 30px 20px;
+            }
+
+            #questionContainer h2 {
+                font-size: 20px;
+            }
+
+            button {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="questionContainer">
+        <h2>Kamu kangen aku nggak, seng? 😳💗</h2>
+        <div class="button-container">
+            <button id="yesBtn">Iya 💞</button>
+            <button id="noBtn">Tidak 😢</button>
+        </div>
+
+        <div id="heartLoader">💗💗💗</div>
+        <div id="resultContainer">
+            <div class="slideshow-container">
+                <!-- Slide 1: Welcome message -->
+                <div class="slide active">
+                    <div style="font-size: 18px; line-height: 1.6;">
+                        Tau kok kamu pasti kangen sama muka aku yang ganteng seperti Iqbal ini 😎💗
+                        <br><br>
+                        Aku juga kangen banget sama kamu 😭💗🫂
+                    </div>
+                </div>
+
+                <!-- Slide 2: First photo -->
+                <div class="slide">
+                    <img src="G1.jpg" alt="Foto kita yang pertama"
+                        onerror="this.style.display='block'; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmZkMWUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmNmNhNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkZvdG8gQkcxLmpwZyB0aWRhayBkaXRlbXVrYW4gPz48L3RleHQ+PC9zdmc+';">
+                    <div style="font-size: 16px; margin-top: 10px;">
+                        Ini foto kita yang pertama 📸💕
+                    </div>
+                </div>
+
+                <!-- Slide 3: Second photo -->
+                <div class="slide">
+                    <img src="G2.jpg" alt="Foto kita yang kedua"
+                        onerror="this.style.display='block'; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmZkMWUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmNmNhNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkZvdG8gQkcyLmpwZyB0aWRhayBkaXRlbXVrYW4gPz88L3RleHQ+PC9zdmc+';">
+                    <div style="font-size: 16px; margin-top: 10px;">
+                        Kenangan indah kita berdua 🥰💗
+                    </div>
+                </div>
+
+                <!-- Slide 4: Third photo -->
+                <div class="slide">
+                    <img src="G3.jpg" alt="Foto kita yang ketiga"
+                        onerror="this.style.display='block'; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmZkMWUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmNmNhNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkZvdG8gQkczLmpwZyB0aWRhayBkaXRlbXVrYW4gPz88L3RleHQ+PC9zdmc+';">
+                    <div style="font-size: 16px; margin-top: 10px;">
+                        Thanks for everything 😊💞
+                    </div>
+                </div>
+
+                <!-- Slide 5: Fourth photo -->
+                <div class="slide">
+                    <img src="G4.jpg" alt="Foto kita yang keempat"
+                        onerror="this.style.display='block'; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmZkMWUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmNmNhNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkZvdG8gQkc0LmpwZyB0aWRhayBkaXRlbXVrYW4gPz88L3RleHQ+PC9zdmc+';">
+                    <div style="font-size: 16px; margin-top: 10px;">
+                        Selalu bahagia bersamamu 😊💞
+                    </div>
+                </div>
+
+                <!-- Navigation buttons -->
+                <div class="nav-buttons">
+                    <button class="nav-btn" onclick="changeSlide(-1)">← Sebelumnya</button>
+                    <button class="nav-btn" onclick="changeSlide(1)">Selanjutnya →</button>
+                </div>
+
+                <!-- Slide counter -->
+                <div class="slide-counter">
+                    <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" preload="auto">
+        <source
+            src="https://cdn.pixabay.com/download/audio/2022/03/14/audio_7b3d01d4c8.mp3?filename=lonely-day-112194.mp3"
+            type="audio/mpeg">
+    </audio>
+
+    <script>
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const questionContainer = document.getElementById("questionContainer");
+        const heartLoader = document.getElementById("heartLoader");
+        const resultContainer = document.getElementById("resultContainer");
+        const bgMusic = document.getElementById("bgMusic");
+
+        // Function to create floating hearts
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.textContent = "💗";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        // Move "No" button randomly when hovered
+        noBtn.addEventListener("mouseenter", () => {
+            const container = questionContainer.getBoundingClientRect();
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            const maxX = container.width - btnWidth - 60;
+            const maxY = container.height - btnHeight - 60;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noBtn.style.left = randomX + "px";
+            noBtn.style.top = randomY + "px";
+        });
+
+        // Handle "Yes" button click
+        yesBtn.addEventListener("click", () => {
+            // Hide buttons
+            yesBtn.style.display = "none";
+            noBtn.style.display = "none";
+
+            // Show heart loader
+            heartLoader.style.display = "block";
+
+            // Try to play music (may be blocked by browser)
+            bgMusic.play().catch(err => {
+                console.log("Audio autoplay blocked");
+            });
+
+            // Start creating hearts
+            const heartInterval = setInterval(createHeart, 300);
+
+            // After 2 seconds, show result
+            setTimeout(() => {
+                heartLoader.style.display = "none";
+                resultContainer.style.display = "block";
+                questionContainer.style.background = "linear-gradient(135deg, #ff6ca6 0%, #ff8fb3 100%)";
+                resultContainer.style.color = "white";
+
+                // Stop creating hearts after 5 more seconds
+                setTimeout(() => {
+                    clearInterval(heartInterval);
+                }, 5000);
+            }, 2000);
+        });
+
+        // Position "No" button initially
+        noBtn.style.left = "150px";
+        noBtn.style.top = "0px";
+
+        // Slideshow functionality
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('totalSlides').textContent = totalSlides;
+        }
+
+        function changeSlide(direction) {
+            currentSlideIndex += direction;
+
+            if (currentSlideIndex >= totalSlides) {
+                currentSlideIndex = 0;
+            } else if (currentSlideIndex < 0) {
+                currentSlideIndex = totalSlides - 1;
+            }
+
+            showSlide(currentSlideIndex);
+        }
+
+        // Initialize slideshow
+        showSlide(0);
+    </script>
+
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9960f9efa7ac3dc8',t:'MTc2MTcyMzExOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
